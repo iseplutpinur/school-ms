@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class AddressProvinces extends Model
 {
     use HasFactory;
+    protected $guarded = [];
+    protected $primaryKey = 'id';
 }

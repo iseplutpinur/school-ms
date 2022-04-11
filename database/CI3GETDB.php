@@ -1,12 +1,8 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Address extends Render_Controller
+class Address
 {
-    function __construct()
-    {
-        parent::__construct();
-    }
 
     public function index()
     {

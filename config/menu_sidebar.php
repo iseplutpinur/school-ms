@@ -10,6 +10,15 @@ return [
             // 'children' => [['title' => 'View User', 'route' => 'admin.user']],
         ],
         [
+            'title' => 'Address', 'icon' => 'fe fe-map-pin',
+            'children' => [
+                ['title' => 'Province', 'route' => 'admin.address.province'],
+                ['title' => 'Regencie', 'route' => 'admin.address.regencie'],
+                ['title' => 'District', 'route' => 'admin.address.district'],
+                ['title' => 'Village', 'route' => 'admin.address.village'],
+            ]
+        ],
+        [
             'title' => 'Mail Box', 'icon' => 'fe fe-mail',
             'children' => [
                 ['title' => 'Inbox'],
