@@ -24,12 +24,12 @@ $page_attr_title = ($page_attr->title == '' ? '' : $page_attr->title . ' | ') . 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="keywords" content="{{ $page_attr->keywords }}">
 
+    <!-- TITLE -->
+    <title>{{ $page_attr_title }}</title>
+
     <!-- FAVICON -->
     <link rel="shortcut icon" type="image/x-icon"
         href="{{ asset('assets/templates/admin/main/assets/images/brand/favicon.ico') }}" />
-
-    <!-- TITLE -->
-    <title>{{ $page_attr_title }}</title>
 
     <!-- BOOTSTRAP CSS -->
     <link id="style" href="{{ asset('assets/templates/admin/main/assets/plugins/bootstrap/css/bootstrap.min.css') }}"
@@ -160,10 +160,6 @@ $page_attr_title = ($page_attr->title == '' ? '' : $page_attr->title . ' | ') . 
     <!-- SIDEBAR JS -->
     <script src="{{ asset('assets/templates/admin/main/assets/plugins/sidebar/sidebar.js') }}"></script>
 
-    <!-- Perfect SCROLLBAR JS-->
-    <script src="{{ asset('assets/templates/admin/main/assets/plugins/p-scroll/perfect-scrollbar.js') }}"></script>
-    <script src="{{ asset('assets/templates/admin/main/assets/plugins/p-scroll/pscroll.js') }}"></script>
-
     <!-- SIDE-MENU JS-->
     <script src="{{ asset('assets/templates/admin/main/assets/plugins/sidemenu/sidemenu.js') }}"></script>
 
@@ -172,6 +168,7 @@ $page_attr_title = ($page_attr->title == '' ? '' : $page_attr->title . ' | ') . 
 
     <!-- CUSTOM JS -->
     <script src="{{ asset('assets/templates/admin/main/assets/js/custom.js') }}"></script>
+
     <script>
         function setBtnLoading(element, text, status = true) {
             const el = $(element);
@@ -179,7 +176,7 @@ $page_attr_title = ($page_attr->title == '' ? '' : $page_attr->title . ' | ') . 
                 el.attr("disabled", "");
                 el.html(
                     `<span class="spinner-border spinner-border-sm mr-1" role="status" aria-hidden="true">
-                                        </span> ${text}`
+                                        </span> <span>${text}</span>`
                 );
             } else {
                 el.removeAttr("disabled");

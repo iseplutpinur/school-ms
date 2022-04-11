@@ -25,12 +25,14 @@ use App\Http\Controllers\LoginController;
 
 // home default
 Route::get('/', function () {
+    if (Auth::check()) {
+        return redirect('/home');
+    }
     return view('auth.login');
 });
 
 // auth
 Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::get('/login2', [LoginController::class, 'index'])->name('login2');
 Route::post('/login', [LoginController::class, 'check_login'])->name('login.check_login');
 Route::get('/logout', [LoginController::class, 'logout'])->name('login.logout');
 

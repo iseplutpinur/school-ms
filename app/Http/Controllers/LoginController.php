@@ -16,7 +16,7 @@ class LoginController extends Controller
         if (Auth::check()) {
             return Redirect::route('dashboard');
         }
-        return view('login');
+        return view('auth.login');
     }
 
     /**
@@ -36,7 +36,7 @@ class LoginController extends Controller
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Login Gagal!'
+                'message' => 'Login Failed! Please re-check your email and password!'
             ], 401);
         }
     }
