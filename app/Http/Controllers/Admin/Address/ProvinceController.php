@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin\Address;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\AddressProvinces;
+use App\Models\Address\Province;
 use Yajra\Datatables\Datatables;
 use Laravel\Fortify\Rules\Password;
 use League\Config\Exception\ValidationException;
@@ -16,7 +16,7 @@ class ProvinceController extends Controller
     {
         if (request()->ajax()) {
 
-            return Datatables::of(AddressProvinces::query())
+            return Datatables::of(Province::query())
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -39,7 +39,7 @@ class ProvinceController extends Controller
                 'id' => ['required', 'string', 'max:2'],
             ]);
 
-            AddressProvinces::create([
+            Province::create([
                 'name' => $request->name,
                 'id' => $request->id,
             ]);
@@ -55,7 +55,7 @@ class ProvinceController extends Controller
     public function update(Request $request)
     {
         try {
-            $address = AddressProvinces::find($request->id);
+            $address = Province::find($request->id);
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
             ]);
@@ -74,7 +74,7 @@ class ProvinceController extends Controller
     public function delete(Request $address)
     {
         try {
-            $address = AddressProvinces::find($address->id);
+            $address = Province::find($address->id);
             $address->delete();
             return response()->json();
         } catch (ValidationException $error) {

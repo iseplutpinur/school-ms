@@ -24,9 +24,11 @@ class DatabaseSeeder extends Seeder
             'active' => '1'
         ]);
         \App\Models\User::factory(150)->create();
-        AddressProvincesSeeder::run();
-        AddressRegenciesSeeder::run();
-        AddressDistrictsSeeder::run();
-        AddressVillagesSeeder::run();
+
+        // address seeders
+        \Database\Seeders\Address\ProvinceSeeder::run();
+        \Database\Seeders\Address\RegenciesSeeder::run();
+        \Database\Seeders\Address\DistrictsSeeder::run();
+        \Database\Seeders\Address\VillagesSeeder::run();
     }
 }
