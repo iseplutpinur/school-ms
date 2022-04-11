@@ -20,6 +20,9 @@
                                     <th>No</th>
                                     <th>ID</th>
                                     <th>Name</th>
+                                    <th>Regencies</th>
+                                    <th>District</th>
+                                    <th>Village</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -126,6 +129,18 @@
                     {
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data: 'regencie',
+                        name: 'regencie'
+                    },
+                    {
+                        data: 'district',
+                        name: 'district'
+                    },
+                    {
+                        data: 'village',
+                        name: 'village'
                     },
                     {
                         data: 'id',
