@@ -54,7 +54,7 @@ Route::get('/home', function () {
             break;
 
         default:
-            return '';
+            return view('auth.login');
             break;
     }
 })->name('dashboard');

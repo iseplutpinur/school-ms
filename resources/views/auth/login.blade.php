@@ -181,14 +181,15 @@ $page_attr_title = ($page_attr->title == '' ? '' : $page_attr->title . ' | ') . 
                                 Swal.fire({
                                         icon: 'success',
                                         title: 'Login successful!',
-                                        text: 'You will be redirected in 3 Seconds',
-                                        timer: 3000,
+                                        text: 'You will be redirected in 2 Seconds',
+                                        timer: 2000,
                                         showCancelButton: false,
                                         showConfirmButton: false
                                     })
                                     .then(function() {
                                         window.location.href =
                                             "{{ route('dashboard') }}";
+
                                     });
                             } else {
                                 console.log(response.success);
