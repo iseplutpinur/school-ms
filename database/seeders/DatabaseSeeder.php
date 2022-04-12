@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\AddressRegencies;
-use App\Models\AddressVillages;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -26,9 +24,9 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory(150)->create();
 
         // address seeders
-        \Database\Seeders\Address\ProvinceSeeder::run();
-        \Database\Seeders\Address\RegenciesSeeder::run();
-        \Database\Seeders\Address\DistrictsSeeder::run();
-        \Database\Seeders\Address\VillagesSeeder::run();
+        AddressProvinceSeeders::run();
+        AddressRegenciesSeeder::run();
+        AddressDistrictSeeders::run();
+        AddressVillageSeeders::run();
     }
 }
