@@ -6,13 +6,30 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-md-flex flex-row justify-content-between">
-                    <h3 class="card-title">Address Provinces Table</h3>
+                    <h3 class="card-title">Address Regencie Table</h3>
                     <button type="button" class="btn btn-rounded btn-success" data-bs-effect="effect-scale"
                         data-bs-toggle="modal" href="#modal-default" onclick="add()" data-target="#modal-default">
                         <i class="bi bi-plus-lg"></i> Add
                     </button>
                 </div>
                 <div class="card-body">
+                    <h5 class="h5">Filter Data</h5>
+                    <form action="javascript:void(0)" class="form-inline ml-md-3 mb-md-3" id="FilterForm">
+                        <div class="form-group me-md-3">
+                            <label for="filter_province" class="me-md-2">Province</label>
+                            <select class="form-control" id="filter_province" name="filter_province">
+                                <option value="">All Province</option>
+                                @foreach ($provinces as $province)
+                                    <option value="{{ $province->id }}">
+                                        {{ $province->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-rounded btn-md btn-info" title="Refresh Filter Table">
+                            <i class="bi bi-arrow-repeat"></i> Refresh
+                        </button>
+                    </form>
                     <div class="table-responsive table-striped">
                         <table class="table table-bordered text-nowrap border-bottom" id="tbl_main">
                             <thead>
@@ -20,7 +37,7 @@
                                     <th>No</th>
                                     <th>ID</th>
                                     <th>Name</th>
-                                    <th>Regencies</th>
+                                    <th>Province</th>
                                     <th>District</th>
                                     <th>Village</th>
                                     <th>Action</th>
@@ -54,6 +71,16 @@
                             <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name"
                                 required="" />
                         </div>
+                        <div class="form-group">
+                            <label for="province_id">Province</label>
+                            <select class="form-control" id="province_id" name="province_id" style="width: 100%">
+                                @foreach ($provinces as $province)
+                                    <option value="{{ $province->id }}">
+                                        {{ $province->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </form>
                 </div>
 
@@ -71,6 +98,10 @@
     </div>
 @endsection
 
+@section('stylesheet')
+    <link rel="stylesheet" href="{{ asset('assets/templates/admin/plugins/select2/css/select2.min.css') }}">
+@endsection
+
 @section('javascript')
     <!-- DATA TABLE JS-->
     <script src="{{ asset('assets/templates/admin/plugins/datatable/js/jquery.dataTables.min.js') }}"></script>
@@ -79,15 +110,41 @@
     <script src="{{ asset('assets/templates/admin/plugins/datatable/responsive.bootstrap5.min.js') }}"></script>
     <script src="{{ asset('assets/templates/admin/plugins/datatable/responsive.bootstrap5.min.js') }}"></script>
 
-
     {{-- sweetalert --}}
     <script src="{{ asset('assets/templates/admin/plugins/sweet-alert/sweetalert2.all.js') }}"></script>
+    <script src="{{ asset('assets/templates/admin/plugins/select2/js/select2.full.min.js') }}"></script>
 
     <script>
         let errorAfterInput = [];
         const table_html = $('#tbl_main');
         let isUpdate = false;
         $(document).ready(function() {
+            // select2 ======================================================================================
+            $('#filter_province').select2();
+            $('#province_id').select2({
+                dropdownParent: $('#modal-default')
+            });
+
+            // $('#tes_select2').select2({
+            //     ajax: {
+            //         url: "{{ route('admin.address.province.select2') }}",
+            //         type: "GET",
+            //         headers: {
+            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //         },
+            //         data: function(params) {
+            //             var query = {
+            //                 search: params.term,
+            //             }
+            //             return query;
+            //         }
+            //     }
+            // });
+
+            // $('#tes_select2')
+            //     .append((new Option('Provinsi111', '100', true, true)))
+            //     .trigger('change'); // set the value to 'US'
+
             // datatable ====================================================================================
             $.ajaxSetup({
                 headers: {
@@ -104,10 +161,9 @@
                 bAutoWidth: false,
                 type: 'GET',
                 ajax: {
-                    url: "{{ route('admin.address.province') }}",
+                    url: "{{ route('admin.address.regencie') }}",
                     data: function(d) {
-                        d['filter[active]'] = $('#filter_active').val();
-                        d['filter[role]'] = $('#filter_role').val();
+                        d['filter[province]'] = $('#filter_province').val();
                     }
                 },
                 columns: [{
@@ -124,8 +180,8 @@
                         name: 'name'
                     },
                     {
-                        data: 'regencie',
-                        name: 'regencie'
+                        data: 'province',
+                        name: 'province'
                     },
                     {
                         data: 'district',
@@ -142,6 +198,7 @@
                             return ` <button type="button" class="btn btn-rounded btn-primary btn-sm" title="Edit Data"
                                 data-id="${full.id}"
                                 data-name="${full.name}"
+                                data-province_id="${full.province_id}"
                                 onClick="editFunc(this)">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
                                 </button>
@@ -179,8 +236,8 @@
                 var formData = new FormData(this);
                 setBtnLoading('#btn-save', 'Save Changes');
                 resetErrorAfterInput();
-                const route = isUpdate ? "{{ route('admin.address.province.update') }}" :
-                    "{{ route('admin.address.province.store') }}";
+                const route = isUpdate ? "{{ route('admin.address.regencie.update') }}" :
+                    "{{ route('admin.address.regencie.store') }}";
                 $.ajax({
                     type: "POST",
                     url: route,
@@ -231,7 +288,7 @@
         function add() {
             isUpdate = false;
             $('#MainForm').trigger("reset");
-            $('#modal-default-title').html("Add Address Provinces");
+            $('#modal-default-title').html("Add Address Regencie");
             $('#modal-default').modal('show');
             $('#id').val('');
             $('#id').removeAttr('readonly');
@@ -243,12 +300,13 @@
         function editFunc(datas) {
             isUpdate = true;
             const data = datas.dataset;
-            $('#modal-default-title').html("Edit Address Provinces");
+            $('#modal-default-title').html("Edit Address Regencie");
             $('#modal-default').modal('show');
             $('#MainForm').trigger("reset");
             $('#id').val(data.id);
             $('#id').attr('readonly', true);
             $('#name').val(data.name);
+            $('#province_id').val(data.province_id).trigger('change');
             $('#password').removeAttr('required');
         }
 
@@ -262,7 +320,7 @@
             }).then(function(result) {
                 if (result.value) {
                     $.ajax({
-                        url: `{{ url('admin/address/province') }}/${id}`,
+                        url: `{{ url('admin/address/regencie') }}/${id}`,
                         type: 'DELETE',
                         dataType: 'json',
                         headers: {
@@ -281,7 +339,7 @@
                             Swal.fire({
                                 position: 'top-end',
                                 icon: 'success',
-                                title: 'Address Provinces deleted successfully',
+                                title: 'Address Regencie deleted successfully',
                                 showConfirmButton: false,
                                 timer: 1500
                             })
@@ -330,8 +388,4 @@
             });
         }
     </script>
-@endsection
-
-@section('stylesheet')
-    <link rel="stylesheet" href="{{ asset('assets/templates/admin/plugins/sweet-alert/sweetalert2.css') }}">
 @endsection

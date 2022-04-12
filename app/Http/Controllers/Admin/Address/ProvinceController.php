@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Address;
 
+use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Address\Province;
+use Facade\FlareClient\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
 use League\Config\Exception\ValidationException;
@@ -120,6 +122,55 @@ class ProvinceController extends Controller
                 'message' => 'Something went wrong',
                 'error' => $error,
             ], 500);
+        }
+    }
+
+    // for API
+    public function get(Request $request)
+    {
+        try {
+            if ($request->id) {
+                $result = Province::find($request->id);
+                if ($result) {
+                    return ResponseFormatter::success($result);
+                } else {
+                    return ResponseFormatter::error(null, "Data not found", 404);
+                }
+            } elseif ($request->search) {
+                $result = Province::where('name', 'like', "%$request->search%")
+                    ->orWhere('id', 'like', "%$request->search%")
+                    ->get();
+                if ($result) {
+                    return ResponseFormatter::success($result);
+                } else {
+                    return ResponseFormatter::error(null, "Data not found", 404);
+                }
+            } else {
+                $result = Province::all();
+                if ($result) {
+                    return ResponseFormatter::success($result);
+                } else {
+                    return ResponseFormatter::error(null, "Data not found", 404);
+                }
+            }
+        } catch (\Exception $error) {
+            return ResponseFormatter::error([
+                'message' => 'Something went wrong',
+                'error' => $error,
+            ], 'Authentication Failed', 500);
+        }
+    }
+
+    public function select2(Request $request)
+    {
+        try {
+            $result = Province::where('name', 'like', "%$request->search%")
+                ->select(['id', DB::raw('name as text')])
+                ->orWhere('id', 'like', "%$request->search%")
+                ->limit(10)->get();
+            return response()->json(['results' => $result]);
+        } catch (\Exception $error) {
+            return response()->json($error, 500);
         }
     }
 }

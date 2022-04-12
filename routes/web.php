@@ -75,6 +75,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'verified', 
         // Province
         Route::group(['prefix' => 'province'], function () {
             Route::get('/', [ProvinceController::class, 'index'])->name('admin.address.province');
+            Route::get('/select2', [ProvinceController::class, 'select2'])->name('admin.address.province.select2');
             Route::post('/', [ProvinceController::class, 'store'])->name('admin.address.province.store');
             Route::delete('/{id}', [ProvinceController::class, 'delete'])->name('admin.address.province.delete');
             Route::post('/update', [ProvinceController::class, 'update'])->name('admin.address.province.update');
