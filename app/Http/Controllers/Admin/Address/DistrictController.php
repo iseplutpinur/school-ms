@@ -132,4 +132,25 @@ class DistrictController extends Controller
             ], 500);
         }
     }
+
+    public function select2(Request $request)
+    {
+        try {
+            $model = District::select(['id', DB::raw('name as text')])
+                ->whereRaw("(`name` like '%$request->search%' or `id` like '%$request->search%')")
+                ->limit(10);
+            if ($request->regency_id) {
+                $model->where('regency_id', '=', $request->regency_id);
+            }
+
+            $result = $model->get()->toArray();
+            if ($request->with_empty) {
+                $result = array_merge([['id' => '', 'text' => 'All District']], $result);
+            }
+
+            return response()->json(['results' => $result]);
+        } catch (\Exception $error) {
+            return response()->json($error, 500);
+        }
+    }
 }
