@@ -129,4 +129,25 @@ class RegencieController extends Controller
             ], 500);
         }
     }
+
+    public function select2(Request $request)
+    {
+        try {
+            $model = Regencie::select(['id', DB::raw('name as text')])
+                ->whereRaw("(`name` like '%$request->search%' or `id` like '%$request->search%')")
+                ->limit(10);
+            if ($request->province_id) {
+                $model->where('province_id', '=', $request->province_id);
+            }
+
+            $result = $model->get()->toArray();
+            if ($request->with_empty) {
+                $result = array_merge([['id' => '', 'text' => 'All Regencie']], $result);
+            }
+
+            return response()->json(['results' => $result]);
+        } catch (\Exception $error) {
+            return response()->json($error, 500);
+        }
+    }
 }

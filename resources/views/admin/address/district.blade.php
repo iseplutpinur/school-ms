@@ -6,35 +6,53 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header d-md-flex flex-row justify-content-between">
-                    <h3 class="card-title">Address Regencie Table</h3>
+                    <h3 class="card-title">Address District Table</h3>
                     <button type="button" class="btn btn-rounded btn-success" data-bs-effect="effect-scale"
                         data-bs-toggle="modal" href="#modal-default" onclick="add()" data-target="#modal-default">
                         <i class="bi bi-plus-lg"></i> Add
                     </button>
                 </div>
                 <div class="card-body">
-                    <div class="form-group me-md-3">
-                        <label for="tes_select2" class="me-md-2">Test Select2</label>
-                        <select class="form-control" id="tes_select2" name="tes_select2">
-                        </select>
+                    <div class="container-fluid">
+                        <form action="javascript:void(0)" class="form-inline ml-md-3 mb-md-3" id="FilterForm">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5 class="h5">Filter Data</h5>
+                                </div>
+                                <div class="col-md-5 my-md-1">
+                                    <div class="form-group">
+                                        <label for="filter_province" class="me-md-2">Province</label>
+                                        <select class="form-control" id="filter_province" name="filter_province"
+                                            style="width: 100%">
+                                            <option value="">All Province</option>
+                                            @foreach ($provinces as $province)
+                                                <option value="{{ $province->id }}">
+                                                    {{ $province->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-5 my-md-1">
+                                    <div class="form-group">
+                                        <label for="filter_regencie" class="me-md-2">Regencie</label>
+                                        <select class="form-control" id="filter_regencie" name="filter_regencie"
+                                            style="width: 100%">
+                                            <option value="">All Regencie</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 d-flex align-items-end my-md-1">
+                                    <div>
+                                        <button type="submit" class="btn btn-rounded btn-md btn-info"
+                                            title="Refresh Filter Table">
+                                            <i class="bi bi-arrow-repeat"></i> Refresh
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <h5 class="h5">Filter Data</h5>
-                    <form action="javascript:void(0)" class="form-inline ml-md-3 mb-md-3" id="FilterForm">
-                        <div class="form-group me-md-3">
-                            <label for="filter_province" class="me-md-2">Province</label>
-                            <select class="form-control" id="filter_province" name="filter_province">
-                                <option value="">All Province</option>
-                                @foreach ($provinces as $province)
-                                    <option value="{{ $province->id }}">
-                                        {{ $province->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-rounded btn-md btn-info" title="Refresh Filter Table">
-                            <i class="bi bi-arrow-repeat"></i> Refresh
-                        </button>
-                    </form>
                     <div class="table-responsive table-striped">
                         <table class="table table-bordered text-nowrap border-bottom" id="tbl_main">
                             <thead>
@@ -43,7 +61,7 @@
                                     <th>ID</th>
                                     <th>Name</th>
                                     <th>Province</th>
-                                    <th>District</th>
+                                    <th>Regencie</th>
                                     <th>Village</th>
                                     <th>Action</th>
                                 </tr>
@@ -68,7 +86,7 @@
                         enctype="multipart/form-data">
                         <div class="form-group">
                             <label class="form-label" for="id">ID <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="id" name="id" placeholder="Enter ID"
+                            <input type="number" class="form-control" id="id" name="id" placeholder="Enter ID"
                                 required="" />
                         </div>
                         <div class="form-group">
@@ -84,6 +102,11 @@
                                         {{ $province->name }}
                                     </option>
                                 @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="regency_id">Regency</label>
+                            <select class="form-control" id="regency_id" name="regency_id" style="width: 100%">
                             </select>
                         </div>
                     </form>
@@ -129,26 +152,48 @@
             $('#province_id').select2({
                 dropdownParent: $('#modal-default')
             });
+            $('#province_id').on('select2:select', function(e) {
+                clearRegency();
+            });
+            // filter
+            $('#filter_regencie').select2({
+                ajax: {
+                    url: "{{ route('admin.address.regencie.select2') }}",
+                    type: "GET",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: function(params) {
+                        var query = {
+                            search: params.term,
+                            province_id: $('#filter_province').val(),
+                            with_empty: true
+                        }
+                        return query;
+                    }
+                }
+            });
 
-            // $('#tes_select2').select2({
-            //     ajax: {
-            //         url: "{{ route('admin.address.province.select2') }}",
-            //         type: "GET",
-            //         headers: {
-            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            //         },
-            //         data: function(params) {
-            //             var query = {
-            //                 search: params.term,
-            //             }
-            //             return query;
-            //         }
-            //     }
-            // });
+            // modal form
+            $('#regency_id').select2({
+                ajax: {
+                    url: "{{ route('admin.address.regencie.select2') }}",
+                    type: "GET",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: function(params) {
+                        var query = {
+                            search: params.term,
+                            province_id: $('#province_id').val()
+                        }
+                        return query;
+                    }
+                },
+                dropdownParent: $('#modal-default')
+            });
 
-            // $('#tes_select2')
-            //     .append((new Option('Provinsi111', '100', true, true)))
-            //     .trigger('change'); // set the value to 'US'
+
 
             // datatable ====================================================================================
             $.ajaxSetup({
@@ -166,9 +211,10 @@
                 bAutoWidth: false,
                 type: 'GET',
                 ajax: {
-                    url: "{{ route('admin.address.regencie') }}",
+                    url: "{{ route('admin.address.district') }}",
                     data: function(d) {
                         d['filter[province]'] = $('#filter_province').val();
+                        d['filter[regencie]'] = $('#filter_regencie').val();
                     }
                 },
                 columns: [{
@@ -189,8 +235,8 @@
                         name: 'province'
                     },
                     {
-                        data: 'district',
-                        name: 'district'
+                        data: 'regencie',
+                        name: 'regencie'
                     },
                     {
                         data: 'village',
@@ -204,6 +250,8 @@
                                 data-id="${full.id}"
                                 data-name="${full.name}"
                                 data-province_id="${full.province_id}"
+                                data-regency_id="${full.regency_id}"
+                                data-regencie="${full.regencie}"
                                 onClick="editFunc(this)">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
                                 </button>
@@ -241,8 +289,8 @@
                 var formData = new FormData(this);
                 setBtnLoading('#btn-save', 'Save Changes');
                 resetErrorAfterInput();
-                const route = isUpdate ? "{{ route('admin.address.regencie.update') }}" :
-                    "{{ route('admin.address.regencie.store') }}";
+                const route = isUpdate ? "{{ route('admin.address.district.update') }}" :
+                    "{{ route('admin.address.district.store') }}";
                 $.ajax({
                     type: "POST",
                     url: route,
@@ -293,25 +341,29 @@
         function add() {
             isUpdate = false;
             $('#MainForm').trigger("reset");
-            $('#modal-default-title').html("Add Address Regencie");
+            $('#modal-default-title').html("Add Address District");
             $('#modal-default').modal('show');
             $('#id').val('');
             $('#id').removeAttr('readonly');
             resetErrorAfterInput();
             $('#password').attr('required', true);
+            clearRegency();
         }
 
 
         function editFunc(datas) {
             isUpdate = true;
             const data = datas.dataset;
-            $('#modal-default-title').html("Edit Address Regencie");
+            $('#modal-default-title').html("Edit Address District");
             $('#modal-default').modal('show');
             $('#MainForm').trigger("reset");
             $('#id').val(data.id);
             $('#id').attr('readonly', true);
             $('#name').val(data.name);
             $('#province_id').val(data.province_id).trigger('change');
+            $('#regency_id')
+                .append((new Option(data.regencie, data.regency_id, true, true)))
+                .trigger('change');
             $('#password').removeAttr('required');
         }
 
@@ -325,7 +377,7 @@
             }).then(function(result) {
                 if (result.value) {
                     $.ajax({
-                        url: `{{ url('admin/address/regencie') }}/${id}`,
+                        url: `{{ url('admin/address/district') }}/${id}`,
                         type: 'DELETE',
                         dataType: 'json',
                         headers: {
@@ -344,7 +396,7 @@
                             Swal.fire({
                                 position: 'top-end',
                                 icon: 'success',
-                                title: 'Address Regencie deleted successfully',
+                                title: 'Address District deleted successfully',
                                 showConfirmButton: false,
                                 timer: 1500
                             })
@@ -391,6 +443,12 @@
                 $(element).addClass("is-valid").removeClass("is-invalid");
                 after.html('');
             });
+        }
+
+        function clearRegency() {
+            $('#regency_id')
+                .append((new Option('', '', true, true)))
+                .trigger('change');
         }
     </script>
 @endsection

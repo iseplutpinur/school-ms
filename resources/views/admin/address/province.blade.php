@@ -46,7 +46,7 @@
                         enctype="multipart/form-data">
                         <div class="form-group">
                             <label class="form-label" for="id">ID <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="id" name="id" placeholder="Enter ID"
+                            <input type="number" class="form-control" id="id" name="id" placeholder="Enter ID"
                                 required="" />
                         </div>
                         <div class="form-group">

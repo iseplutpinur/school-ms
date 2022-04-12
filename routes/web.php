@@ -84,6 +84,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'verified', 
         // Regencie
         Route::group(['prefix' => 'regencie'], function () {
             Route::get('/', [RegencieController::class, 'index'])->name('admin.address.regencie');
+            Route::get('/select2', [RegencieController::class, 'select2'])->name('admin.address.regencie.select2');
             Route::post('/', [RegencieController::class, 'store'])->name('admin.address.regencie.store');
             Route::delete('/{id}', [RegencieController::class, 'delete'])->name('admin.address.regencie.delete');
             Route::post('/update', [RegencieController::class, 'update'])->name('admin.address.regencie.update');
@@ -92,6 +93,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'verified', 
         // District
         Route::group(['prefix' => 'district'], function () {
             Route::get('/', [DistrictController::class, 'index'])->name('admin.address.district');
+            Route::get('/select2', [DistrictController::class, 'select2'])->name('admin.address.district.select2');
             Route::post('/', [DistrictController::class, 'store'])->name('admin.address.district.store');
             Route::delete('/{id}', [DistrictController::class, 'delete'])->name('admin.address.district.delete');
             Route::post('/update', [DistrictController::class, 'update'])->name('admin.address.district.update');
@@ -100,6 +102,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'verified', 
         // Village
         Route::group(['prefix' => 'village'], function () {
             Route::get('/', [VillageController::class, 'index'])->name('admin.address.village');
+            Route::get('/select2', [VillageController::class, 'select2'])->name('admin.address.village.select2');
             Route::post('/', [VillageController::class, 'store'])->name('admin.address.village.store');
             Route::delete('/{id}', [VillageController::class, 'delete'])->name('admin.address.village.delete');
             Route::post('/update', [VillageController::class, 'update'])->name('admin.address.village.update');
