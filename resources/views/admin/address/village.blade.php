@@ -310,6 +310,8 @@
                                 data-province_id="${full.province_id}"
                                 data-regency_id="${full.regency_id}"
                                 data-regencie="${full.regencie}"
+                                data-district_id="${full.district_id}"
+                                data-district="${full.district}"
                                 onClick="editFunc(this)">
                                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit
                                 </button>
@@ -422,6 +424,9 @@
             $('#province_id').val(data.province_id).trigger('change');
             $('#regency_id')
                 .append((new Option(data.regencie, data.regency_id, true, true)))
+                .trigger('change');
+            $('#district_id')
+                .append((new Option(data.district, data.district_id, true, true)))
                 .trigger('change');
             $('#password').removeAttr('required');
         }
