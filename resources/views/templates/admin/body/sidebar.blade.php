@@ -48,9 +48,10 @@ function sidebarMenu(array $menus, $navigation): string
             }
 
             $menu = filterMenu($menu, $navigation);
-            $active_1 = $menu->active ? 'is-expanded' : '';
+            $active_1 = $active ? 'is-expanded' : '';
+            $active_2 = $active ? 'active' : '';
             $menu_body .= " <li class=\"slide $active_1\">
-                                <a class=\"side-menu__item $active_1 $menu->active_class\" data-bs-toggle=\"slide\" href=\"javascript:void(0)\">
+                                <a class=\"side-menu__item $active_1 $active_2\" data-bs-toggle=\"slide\" href=\"javascript:void(0)\">
                                     <i class=\"side-menu__icon $menu->icon\"></i>
                                     <span class=\"side-menu__label\">$menu->title</span>
                                     <i class=\"angle fe fe-chevron-right\"></i>
