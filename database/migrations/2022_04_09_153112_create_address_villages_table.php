@@ -20,7 +20,8 @@ class CreateAddressVillagesTable extends Migration
             $table->timestamps();
             $table->foreign('district_id')
                 ->references('id')->on('address_districts')
-                ->nullOnDelete()->cascadeOnUpdate();
+                // ->nullOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

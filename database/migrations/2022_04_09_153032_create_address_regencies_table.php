@@ -20,7 +20,8 @@ class CreateAddressRegenciesTable extends Migration
             $table->timestamps();
             $table->foreign('province_id')
                 ->references('id')->on('address_provinces')
-                ->nullOnDelete()->cascadeOnUpdate();
+                // ->nullOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

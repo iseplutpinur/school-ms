@@ -20,7 +20,8 @@ class CreateAddressDistrictsTable extends Migration
             $table->timestamps();
             $table->foreign('regency_id')
                 ->references('id')->on('address_regencies')
-                ->nullOnDelete()->cascadeOnUpdate();
+                // ->nullOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 
