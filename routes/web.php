@@ -49,13 +49,17 @@ Route::get('/home', function () {
             return Redirect::route('admin.dashboard');
             break;
 
+        case User::ROLE_USER:
+            return Redirect::route('user.dashboard');
+            break;
+
         default:
             return '';
             break;
     }
 })->name('dashboard');
 
-// user management all route
+// Admin route
 Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'verified', 'admin']], function () {
     Route::get('/dashboard', function () {
         return view('admin.dashboard', ['page_attr' => ['title' => 'Dashboard']]);
@@ -111,10 +115,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'verified', 
 });
 
 
-Route::get('/tesadmin', function () {
-    return view('templates.admin.index');
+// User Panel Admin
+Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum', 'verified', 'user']], function () {
+    Route::get('/dashboard', function () {
+        return view('user.dashborard', ['page_attr' => ['title' => 'Dashboard']]);
+    })->name('user.dashboard');
 });
 
-
-Route::get('db', function () {
+Route::get('/tesadmin', function () {
+    return view('templates.admin.index');
 });

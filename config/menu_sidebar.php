@@ -41,6 +41,9 @@ return [
                 ['title' => 'Progress Bars']
             ]
         ]
+    ],
+    'user' => [
+        ['title' => 'Dashboard', 'route' => 'user.dashboard', 'icon' => 'fe fe-home'],
     ]
 
 ];
