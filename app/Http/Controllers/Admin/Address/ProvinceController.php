@@ -74,7 +74,7 @@ class ProvinceController extends Controller
         try {
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
-                'id' => ['required', 'string', 'max:2'],
+                'id' => ['required', 'int', 'max:99', 'unique:address_provinces'],
             ]);
 
             Province::create([
